@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from "next/server";
 import bcryptjs from "bcryptjs";
 import { sendEmail } from "@/helpers/mailer";
 
-export const POST = async (request: NextResponse) => {
+export const POST = async (request: NextRequest) => {
   try {
     dbConnection();
 
