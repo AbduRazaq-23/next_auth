@@ -38,7 +38,7 @@ export const POST = async (request: NextResponse) => {
 
     const savedUser = await newUser.save();
 
-    // await sendEmail({ email, emailType: "VERIFIED", userId: savedUser._id });
+    await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });
 
     return NextResponse.json({
       message: "User registered successfully",
