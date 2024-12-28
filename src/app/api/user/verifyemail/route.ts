@@ -13,13 +13,19 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json({ error: "No token" }, { status: 400 });
     }
 
-    const user = await User.findOne(
-      { verifyToken: token },
-      { verifyTokenExpiry: { $gt: Date.now() } }
-    );
+    const user = await User.findOne({
+      verifyToken: token,
+      verifyTokenExpiry: { $gt: Date.now() },
+    });
     if (!user) {
       return NextResponse.json({ error: "Invalid token" }, { status: 400 });
     }
+
+    user.isVerified = true;
+    user.verifyToken = undefined;
+    user.verifyTokenExpiry = undefined;
+
+    await user.save();
 
     return NextResponse.json("verfied successfull");
   } catch (error: any) {
