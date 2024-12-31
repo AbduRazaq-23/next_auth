@@ -19,17 +19,14 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, isVerified: true });
     if (!user) {
       return NextResponse.json({ error: "do not exit email" }, { status: 400 });
     }
 
-    const validPassword = bcryptjs.compare(password, user.password);
+    const validPassword = await bcryptjs.compare(password, user.password);
     if (!validPassword) {
-      return NextResponse.json(
-        { error: "invalid credentials" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
     }
 
     const response = NextResponse.json(
