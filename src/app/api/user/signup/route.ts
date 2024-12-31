@@ -9,9 +9,9 @@ export const POST = async (request: NextRequest) => {
     dbConnection();
 
     const requestBody = await request.json();
-    const { username, email, password } = requestBody;
+    const { firstName, lastName, email, password, cpassword } = requestBody;
 
-    if (!username || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !cpassword) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -19,9 +19,10 @@ export const POST = async (request: NextRequest) => {
     }
 
     const existingUser = await User.findOne({ email });
+
     if (existingUser) {
       return NextResponse.json(
-        { error: "User already exists" },
+        { message: "User already exists" },
         { status: 400 }
       );
     }
@@ -31,7 +32,8 @@ export const POST = async (request: NextRequest) => {
     const hashedPassword = await bcryptjs.hash(password, salt);
 
     const newUser = new User({
-      username,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
     });
@@ -43,10 +45,7 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({
       message: "User registered successfully",
       success: true,
-      user: {
-        username: savedUser.username,
-        email: savedUser.email,
-      },
+      savedUser,
     });
   } catch (error: any) {
     console.error("Error registering user:", error);
