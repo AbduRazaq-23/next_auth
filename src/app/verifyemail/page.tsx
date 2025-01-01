@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const verifyEmail = () => {
   const [token, setToken] = useState("");
@@ -11,6 +12,7 @@ const verifyEmail = () => {
       setLoading(true);
       await axios.post("/api/user/verifyemail", { token });
       console.log("verify email successfully");
+      toast.success("email verified successfully", { position: "top-right" });
     } catch (error: any) {
       console.log(error.message);
     } finally {

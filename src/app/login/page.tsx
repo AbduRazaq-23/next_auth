@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LogInForm() {
   const router = useRouter();
@@ -18,7 +19,8 @@ export default function LogInForm() {
       setLoading(true);
       const response: any = await axios.post("/api/user/login", user);
       console.log(response);
-      router.push("/");
+      router.push("/profile");
+      toast.success("login successfully", { position: "top-right" });
     } catch (error: any) {
       console.log(error.message);
     } finally {

@@ -1,40 +1,27 @@
 "use client";
-import axios from "axios";
-import { useEffect, useState } from "react";
 
-// Define the type for the profile
-interface Profile {
-  firstName?: string; // Optional in case the API does not return it
-  lastName?: string;
-  email?: string;
-}
+import Link from "next/link";
+import { Toaster } from "react-hot-toast";
 
 export default function Home() {
-  const [profile, setProfile] = useState<Profile | null>(null); // Properly typed initial state
-
-  useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const res = await axios.get<{ data: Profile }>("/api/user/me");
-        setProfile(res.data.data); // Correctly typed response
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      }
-    };
-
-    getProfile();
-  }, []);
-
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        {/* Render profile's firstName if available */}
-        {profile?.firstName ? (
-          <h1 className="text-2xl font-bold">Welcome, {profile.firstName}!</h1>
-        ) : (
-          <p>Loading profile...</p>
-        )}
-      </main>
+    <div className="flex flex-col  justify-center items-center min-h-screen">
+      <h1 className="text-7xl font-bold ">WelCome</h1>
+      <p>AbduRazaq NextJs Developer</p>
+
+      <div className="flex space-x-4 mt-10">
+        <Link href={"/login"}>
+          <button className=" border border-gray-500 rounded-md px-4 py-2">
+            logIn
+          </button>
+        </Link>
+        <Link href={"/signup"}>
+          <button className=" border border-gray-500 rounded-md px-4 py-2">
+            Signup
+          </button>
+        </Link>
+      </div>
+      <Toaster />
     </div>
   );
 }

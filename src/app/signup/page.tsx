@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function SignupForm() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export default function SignupForm() {
       console.log("signup successfully", response.data);
 
       router.push("/login");
+      toast.success("signup successfully", { position: "top-right" });
     } catch (error: any) {
       console.log(error.message);
     } finally {
