@@ -1,13 +1,29 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function LogInForm() {
-  const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+  const [user, setUser] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+
+  const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+
+    try {
+      setLoading(true);
+      const response: any = await axios.post("/api/user/login", user);
+      console.log(response);
+      router.push("/");
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -23,18 +39,26 @@ export default function LogInForm() {
               id="email"
               placeholder="abdurazaq.dev23@gmail.com"
               type="email"
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" placeholder="••••••••" type="password" />
+            <Input
+              id="password"
+              placeholder="••••••••"
+              type="password"
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+            />
           </LabelInputContainer>
 
           <button
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
             type="submit"
           >
-            LogIn &rarr;
+            {loading ? "LogIn..." : "LogIn"} &rarr;
             <BottomGradient />
           </button>
         </form>

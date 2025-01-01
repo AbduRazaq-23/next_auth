@@ -9,9 +9,9 @@ export const POST = async (request: NextRequest) => {
     dbConnection();
 
     const requestBody = await request.json();
-
     const { email, password } = requestBody;
 
+    console.log(email, password);
     if (!email || !password) {
       return NextResponse.json(
         { error: "please fill the field" },
@@ -21,7 +21,10 @@ export const POST = async (request: NextRequest) => {
 
     const user = await User.findOne({ email, isVerified: true });
     if (!user) {
-      return NextResponse.json({ error: "do not exit email" }, { status: 400 });
+      return NextResponse.json(
+        { message: "do not exit email" },
+        { status: 400 }
+      );
     }
 
     const validPassword = await bcryptjs.compare(password, user.password);
